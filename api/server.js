@@ -1,6 +1,6 @@
 const express = require('express');
 
-const Pokemon = require('../pokemon/pokemonModel.js');
+const Pokemon = require('../pokemon/pokemon-model.js');
 
 const server = express();
 
@@ -11,11 +11,12 @@ server.get('/', (req, res) => {
 });
 
 server.get('/pokemon', (req, res) => {
-  Hobbits.getAll()
-    .then(hobbits => {
-      res.status(200).json(rows);
+  Pokemon.getAll()
+    .then(pokemon => {
+      res.status(200).json(pokemon);
     })
     .catch(error => {
+      console.log(error);
       res.status(500).json(error);
     });
 });
