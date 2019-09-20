@@ -11,13 +11,49 @@ server.get('/', (req, res) => {
 });
 
 server.get('/pokemon', (req, res) => {
-  Pokemon.getAll()
+  Pokemon.find()
     .then(pokemon => {
       res.status(200).json(pokemon);
     })
     .catch(error => {
       console.log(error);
       res.status(500).json(error);
+    });
+});
+
+server.post('/pokemon', (req, res) => {
+  const { type, pokedexNumber, name } = req.body;
+
+  if (!type || !pokedexNumber || !name) {
+    return res
+      .status(400)
+      .json({ error: 'Need type, pokedexNumber, and name' });
+  }
+
+  Pokemon.insert({ type, pokedexNumber, name })
+    .then(response => {
+      res.status(201).json(response[0]);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'Error inserting pokemon' });
+    });
+});
+
+server.delete('/pokemon/:id', (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    return res.status(400).json({ error: 'Need id' });
+  }
+
+  Pokemon.remove(id)
+    .then(response => {
+      res.status(200).json(response);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'Error deleting pokemon' });
     });
 });
 

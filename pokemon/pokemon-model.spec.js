@@ -25,17 +25,5 @@ describe('pokemon model', () => {
       // assert the record was inserted
       expect(pokemon).toHaveLength(1);
     });
-
-    // it('should insert hobbits into the db', async () => {
-    //   // insert a record
-    //   const [id] = await Hobbits.insert({ name: 'Gaffer' });
-
-    //   let hobbit = await db('hobbits')
-    //     .where({ id })
-    //     .first();
-
-    //   // assert the record was inserted
-    //   expect(hobbit.name).toBe('Gaffer');
-    // });
   });
 });

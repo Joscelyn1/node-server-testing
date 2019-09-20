@@ -2,28 +2,20 @@ const db = require('../data/db-config.js');
 
 module.exports = {
   insert,
-  update,
   remove,
-  getAll,
-  findById
+  find
 };
 
 async function insert(pokemon) {
   return db('pokemon').insert(pokemon, 'id');
 }
 
-async function update(id, changes) {
-  return null;
-}
-
 function remove(id) {
-  return null;
+  return db('pokemon')
+    .where('id', id)
+    .del();
 }
 
-function getAll() {
+function find() {
   return db('pokemon');
-}
-
-function findById(id) {
-  return null;
 }
