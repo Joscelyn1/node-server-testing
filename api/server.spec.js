@@ -59,23 +59,30 @@ describe('server.js', () => {
     });
 
     describe('DELETE /pokemon', () => {
-      it('returns 200 OK', () => {
-        return request(server)
-          .delete('/pokemon/1')
-          .then(res => {
-            expect(res.status).toBe(200);
-          });
-      });
-
-      it('should delete pokemon', async () => {
+      it('returns 200 OK', async () => {
         await Pokemon.insert({
-          name: 'Ivysaur',
+          name: 'Gloom',
           type: 'grass',
           pokedexNumber: 2
         });
 
+        const res = await request(server).delete('/pokemon/Gloom');
+
+        expect(res.status).toBe(200);
+        // .then(res => {
+        //   expect(res.status).toBe(200);
+        // });
+      });
+
+      it('should delete pokemon', async () => {
+        await Pokemon.insert({
+          name: 'Espeon',
+          type: 'psychic',
+          pokedexNumber: 2
+        });
+
         return request(server)
-          .delete('/pokemon/2')
+          .delete('/pokemon/Espeon')
           .then(res => {
             expect(Number(res.text)).toBe(1);
           });
@@ -89,6 +96,20 @@ describe('server.js', () => {
           .send({ type: 'grass', pokedexNumber: 3, name: 'Venausaur' })
           .then(response => {
             expect(response.status).toBe(201);
+          });
+      });
+
+      it('should add pokemon', async () => {
+        await Pokemon.insert({
+          name: 'Oddish',
+          type: 'grass',
+          pokedexNumber: 2
+        });
+
+        return request(server)
+          .get('/pokemon/Oddish')
+          .then(res => {
+            expect(res.body.name).toBe('Oddish');
           });
       });
     });

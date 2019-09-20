@@ -32,7 +32,14 @@ server.post('/pokemon', (req, res) => {
 
   Pokemon.insert({ type, pokedexNumber, name })
     .then(response => {
-      res.status(201).json(response[0]);
+      Pokemon.find(req.body.name)
+        .then(response => {
+          res.status(201).json(response[0]);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({ error: err });
+        });
     })
     .catch(err => {
       console.log(err);
@@ -40,20 +47,40 @@ server.post('/pokemon', (req, res) => {
     });
 });
 
-server.delete('/pokemon/:id', (req, res) => {
-  const id = req.params.id;
+server.delete('/pokemon/:name', (req, res) => {
+  const name = req.params.name;
 
-  if (!id) {
-    return res.status(400).json({ error: 'Need id' });
+  if (!name) {
+    return res.status(400).json({ error: 'Need name' });
   }
 
-  Pokemon.remove(id)
+  Pokemon.remove(name)
     .then(response => {
-      res.status(200).json(response);
+      if (response) {
+        console.log(response);
+        res.status(200).json(response);
+      } else {
+        res
+          .status(404)
+          .json({ error: "couldn't find a pokemon with that name" });
+      }
     })
     .catch(err => {
       console.log(err);
       res.status(500).json({ error: 'Error deleting pokemon' });
+    });
+});
+
+server.get('/pokemon/:name', (req, res) => {
+  const name = req.params.name;
+
+  Pokemon.find(name)
+    .then(response => {
+      res.status(200).json(response[0]);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'Error finding pokemon' });
     });
 });
 

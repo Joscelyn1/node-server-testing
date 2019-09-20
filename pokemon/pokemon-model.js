@@ -10,12 +10,16 @@ async function insert(pokemon) {
   return db('pokemon').insert(pokemon, 'id');
 }
 
-function remove(id) {
+function remove(name) {
   return db('pokemon')
-    .where('id', id)
+    .where('name', name)
     .del();
 }
 
-function find() {
-  return db('pokemon');
+function find(name) {
+  if (name) {
+    return db('pokemon').where('name', name);
+  } else {
+    return db('pokemon');
+  }
 }
